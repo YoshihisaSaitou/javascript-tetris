@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>テトリス</title>
+        <style type="text/css">
+        body{
+            background-color: #fff;
+        }
+        div{
+            width: 300px;
+            height: 500px;
+            background-color: #000;
+        }
+        </style>
+    </head>
+    <body>
+        <div>
+            <canvas id="canvas"></canvas>
+        </div>
+        <script type="text/javascript">
+        var BLOCK_SIZE_W = 25;
+        var BLOCK_SIZE_H = 25;
+        var SHADOW_BLUR = 2;
+
+        let canvas = document.getElementById('canvas');
+        let ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'rgb(0,0,255)';
+        ctx.shadowColor = 'rgb(168,168,255)';
+        ctx.shadowBlur = SHADOW_BLUR;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.fillRect(10, 10, BLOCK_SIZE_W, BLOCK_SIZE_H);
+        ctx.fillRect(10, 10+(BLOCK_SIZE_H*1)+SHADOW_BLUR, BLOCK_SIZE_W, BLOCK_SIZE_H);
+        ctx.fillRect(10, 10+(BLOCK_SIZE_H*2)+SHADOW_BLUR, BLOCK_SIZE_W, BLOCK_SIZE_H);
+        //ctx.fillRect(10, 57, BLOCK_SIZE_W, BLOCK_SIZE_H);
+        
+        function blockCreate(block_flg){
+            if(block_flg == 1){
+
+            }
+        }
+        </script>
+    </body>
+</html>
