@@ -7,38 +7,106 @@
         body{
             background-color: #fff;
         }
-        div{
+        #screen{
             width: 300px;
-            height: 500px;
-            background-color: #000;
+            /*height: 500px;
+            background-color: #000;*/
         }
         </style>
     </head>
     <body>
         <div>
-            <canvas id="canvas"></canvas>
+            <div id="screen"><canvas id="canvas"></canvas></div>
+            <div id="control">
+            <button id="move_left_btn" type="button">◀</button>
+            <button id="move_down_btn" type="button">▼</button>
+            <button id="move_right_btn" type="button">▶</button>
+            <button id="move_right_btn" type="button">○</button>
+            </div>
         </div>
         <script type="text/javascript">
         var BLOCK_SIZE_W = 25;
         var BLOCK_SIZE_H = 25;
         var SHADOW_BLUR = 2;
-
+        var FILL_STYLE = 'rgb(0,0,0)';
+        var SHADOW_COLOR = 'rgb(0,0,0)';
+        var FILL_STYLE_BLOCK = 'rgb(0,0,255)';
+        var SHADOW_COLOR_BLOCK = 'rgb(168,168,255)';
+        var MOVE_X = 0;
+        var MOVE_Y = 0;
+        var MAP = [
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,1,1,0,0,0,0,0,0],
+            [0,0,1,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0]
+        ];
+        var BLOCK = [
+            [1]
+        ];
+        
+        
+        
+        
+        
         let canvas = document.getElementById('canvas');
         let ctx = canvas.getContext('2d');
-        ctx.fillStyle = 'rgb(0,0,255)';
-        ctx.shadowColor = 'rgb(168,168,255)';
-        ctx.shadowBlur = SHADOW_BLUR;
+        
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
-        ctx.fillRect(10, 10, BLOCK_SIZE_W, BLOCK_SIZE_H);
-        ctx.fillRect(10, 10+(BLOCK_SIZE_H*1)+SHADOW_BLUR, BLOCK_SIZE_W, BLOCK_SIZE_H);
-        ctx.fillRect(10, 10+(BLOCK_SIZE_H*2)+SHADOW_BLUR, BLOCK_SIZE_W, BLOCK_SIZE_H);
-        //ctx.fillRect(10, 57, BLOCK_SIZE_W, BLOCK_SIZE_H);
-        
-        function blockCreate(block_flg){
-            if(block_flg == 1){
 
+        for(var i=0;i < MAP.length;i++){
+            for(var j=0;j < MAP[i].length;j++){
+                if(MAP[i][j] == 0){
+                    ctx.fillStyle = FILL_STYLE;
+                    ctx.shadowColor = SHADOW_COLOR;
+                    //ctx.shadowBlur = SHADOW_BLUR;
+                }else{
+                    ctx.fillStyle = FILL_STYLE_BLOCK;
+                    ctx.shadowColor = SHADOW_COLOR_BLOCK;
+                    ctx.shadowBlur = SHADOW_BLUR;
+                }
+                ctx.fillRect(((BLOCK_SIZE_W+SHADOW_BLUR)*i), ((BLOCK_SIZE_H+SHADOW_BLUR)*j), BLOCK_SIZE_W+SHADOW_BLUR, BLOCK_SIZE_H+SHADOW_BLUR);
             }
+        }
+        /*
+        ctx.fillRect(0, 0, BLOCK_SIZE_W, BLOCK_SIZE_H);
+        ctx.fillRect(0, ((BLOCK_SIZE_H+SHADOW_BLUR)*1), BLOCK_SIZE_W, BLOCK_SIZE_H);
+        ctx.fillRect(0, ((BLOCK_SIZE_H+SHADOW_BLUR)*2), BLOCK_SIZE_W, BLOCK_SIZE_H);
+        ctx.fillRect(0, ((BLOCK_SIZE_H+SHADOW_BLUR)*3), BLOCK_SIZE_W, BLOCK_SIZE_H);
+        */
+        
+        //blockCreate(1, MOVE_X, MOVE_Y);
+        //blockCreate(1, 100, 0);
+        /*setInterval(function(){
+            blockCreate(1, MOVE_X, MOVE_Y)
+        }, 1000);*/
+        function blockCreate(block_flg, x, y){
+            let canvas = document.getElementById('canvas');
+            let ctx = canvas.getContext('2d');
+            if(block_flg == 1){
+                
+                ctx.fillStyle = FILL_STYLE;
+                ctx.shadowColor = SHADOW_COLOR;
+                ctx.shadowBlur = SHADOW_BLUR;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 0;
+                ctx.fillRect(x, y, BLOCK_SIZE_W, BLOCK_SIZE_H);
+                ctx.fillRect(x, y+((BLOCK_SIZE_H+SHADOW_BLUR)*1), BLOCK_SIZE_W, BLOCK_SIZE_H);
+                ctx.fillRect(x, y+((BLOCK_SIZE_H+SHADOW_BLUR)*2), BLOCK_SIZE_W, BLOCK_SIZE_H);
+                ctx.fillRect(x, y+((BLOCK_SIZE_H+SHADOW_BLUR)*3), BLOCK_SIZE_W, BLOCK_SIZE_H);
+            }
+            
+            //MOVE_Y = MOVE_Y + 10;
+            //console.log(MOVE_Y);
         }
         </script>
     </body>
