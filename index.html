@@ -8,9 +8,9 @@
             background-color: #fff;
         }
         #screen{
-            width: 300px;
-            /*height: 500px;
-            background-color: #000;*/
+            width: 100%;
+            height: 100%;
+            /*background-color: #000;*/
         }
         </style>
     </head>
@@ -27,54 +27,49 @@
         <script type="text/javascript">
         var BLOCK_SIZE_W = 25;
         var BLOCK_SIZE_H = 25;
-        var SHADOW_BLUR = 2;
+        var SHADOW_BLUR = 0;
         var FILL_STYLE = 'rgb(0,0,0)';
         var SHADOW_COLOR = 'rgb(0,0,0)';
         var FILL_STYLE_BLOCK = 'rgb(0,0,255)';
-        var SHADOW_COLOR_BLOCK = 'rgb(168,168,255)';
+        var STROKE_STYLE_BLOCK = 'rgb(168,168,255)';
         var MOVE_X = 0;
         var MOVE_Y = 0;
         var MAP = [
+            [0,0,1,0,0,0,0,0,0,0],
+            [1,1,1,1,1,0,0,1,1,1],
+            [0,0,1,0,0,0,0,0,0,0],
+            [1,0,1,0,0,0,0,0,0,0],
+            [0,0,1,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0,0],
-            [0,0,1,1,0,0,0,0,0,0],
             [0,0,1,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0]
+            [0,0,1,0,0,0,0,0,0,0],
+            [0,0,1,0,0,0,0,0,0,1]
         ];
         var BLOCK = [
             [1]
         ];
         
+        var canvas = document.getElementById('canvas');
+        canvas.width = BLOCK_SIZE_W * MAP[0].length;
+        canvas.height = BLOCK_SIZE_H * MAP.length;
+        var ctx = canvas.getContext('2d');
         
-        
-        
-        
-        let canvas = document.getElementById('canvas');
-        let ctx = canvas.getContext('2d');
-        
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 0;
-
+        //iが高さでjが幅
         for(var i=0;i < MAP.length;i++){
             for(var j=0;j < MAP[i].length;j++){
                 if(MAP[i][j] == 0){
                     ctx.fillStyle = FILL_STYLE;
                     ctx.shadowColor = SHADOW_COLOR;
-                    //ctx.shadowBlur = SHADOW_BLUR;
                 }else{
                     ctx.fillStyle = FILL_STYLE_BLOCK;
-                    ctx.shadowColor = SHADOW_COLOR_BLOCK;
-                    ctx.shadowBlur = SHADOW_BLUR;
+                    ctx.strokeStyle = STROKE_STYLE_BLOCK;
+                    ctx.strokeRect(BLOCK_SIZE_W * j, BLOCK_SIZE_H * i, BLOCK_SIZE_W, BLOCK_SIZE_H);
                 }
-                ctx.fillRect(((BLOCK_SIZE_W+SHADOW_BLUR)*i), ((BLOCK_SIZE_H+SHADOW_BLUR)*j), BLOCK_SIZE_W+SHADOW_BLUR, BLOCK_SIZE_H+SHADOW_BLUR);
+                ctx.fillRect(BLOCK_SIZE_W * j, BLOCK_SIZE_H * i, BLOCK_SIZE_W, BLOCK_SIZE_H);
             }
         }
         /*
@@ -89,7 +84,7 @@
         /*setInterval(function(){
             blockCreate(1, MOVE_X, MOVE_Y)
         }, 1000);*/
-        function blockCreate(block_flg, x, y){
+        /*function blockCreate(block_flg, x, y){
             let canvas = document.getElementById('canvas');
             let ctx = canvas.getContext('2d');
             if(block_flg == 1){
@@ -107,7 +102,7 @@
             
             //MOVE_Y = MOVE_Y + 10;
             //console.log(MOVE_Y);
-        }
+        }*/
         </script>
     </body>
 </html>
