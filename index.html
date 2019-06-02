@@ -25,84 +25,97 @@
             </div>
         </div>
         <script type="text/javascript">
-        var BLOCK_SIZE_W = 25;
-        var BLOCK_SIZE_H = 25;
-        var SHADOW_BLUR = 0;
-        var FILL_STYLE = 'rgb(0,0,0)';
-        var SHADOW_COLOR = 'rgb(0,0,0)';
-        var FILL_STYLE_BLOCK = 'rgb(0,0,255)';
-        var STROKE_STYLE_BLOCK = 'rgb(168,168,255)';
-        var MOVE_X = 0;
-        var MOVE_Y = 0;
-        var MAP = [
-            [0,0,1,0,0,0,0,0,0,0],
-            [1,1,1,1,1,0,0,1,1,1],
-            [0,0,1,0,0,0,0,0,0,0],
-            [1,0,1,0,0,0,0,0,0,0],
-            [0,0,1,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,1,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0,0],
-            [0,0,1,0,0,0,0,0,0,0],
-            [0,0,1,0,0,0,0,0,0,1]
+        const BLOCK_SIZE_W = 25;//横のブロックサイズ
+        const BLOCK_SIZE_H = 25;//縦のブロックサイズ
+        const BLOCK_FILL_STYLE = 'rgb(0,0,255)';//ブロック色
+        const BLOCK_STROKE_STYLE = 'rgb(168,168,255)';//ブロック枠の色
+        const MAP_FILL_STYLE = 'rgb(0,0,0)';//マップ色
+        //ブロック定義
+        const BLOCK = [
+            [
+                [1]
+            ],
+            [
+                [1],
+                [1],
+                [1],
+                [1]
+            ],
+            [
+                [1],
+                [1],
+                [1,1]
+            ],
+            [
+                [1],
+                [1,1]
+            ],
+            [
+                [1],
+                [1,1],
+                [1]
+            ]
         ];
-        var BLOCK = [
-            [1]
+
+        //マップ定義
+        let MAP = [
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0,0,0,0]
         ];
+        //var MOVE_X = 0;
+        //var MOVE_Y = 0;
         
-        var canvas = document.getElementById('canvas');
-        canvas.width = BLOCK_SIZE_W * MAP[0].length;
-        canvas.height = BLOCK_SIZE_H * MAP.length;
-        var ctx = canvas.getContext('2d');
+        let CANVAS = document.getElementById('canvas');
+        CANVAS.width = BLOCK_SIZE_W * MAP[0].length;
+        CANVAS.height = BLOCK_SIZE_H * MAP.length;
+        let CTX = CANVAS.getContext('2d');
         
-        //iが高さでjが幅
-        for(var i=0;i < MAP.length;i++){
-            for(var j=0;j < MAP[i].length;j++){
-                if(MAP[i][j] == 0){
-                    ctx.fillStyle = FILL_STYLE;
-                    ctx.shadowColor = SHADOW_COLOR;
-                }else{
-                    ctx.fillStyle = FILL_STYLE_BLOCK;
-                    ctx.strokeStyle = STROKE_STYLE_BLOCK;
-                    ctx.strokeRect(BLOCK_SIZE_W * j, BLOCK_SIZE_H * i, BLOCK_SIZE_W, BLOCK_SIZE_H);
+        //マップにブロック作成
+        let block_no = Math.floor(Math.random() * BLOCK.length);
+        MAP = createBlock(MAP, BLOCK[block_no]);
+        //マップ作成
+        createMap(CTX, MAP);
+        
+        //マップ作成関数
+        function createMap(ctx, map){
+            //iが高さでjが幅
+            for(let i=0;i < map.length;i++){
+                for(let j=0;j < map[i].length;j++){
+                    if(map[i][j] == 0){
+                        ctx.fillStyle = MAP_FILL_STYLE;
+                    }else{
+                        ctx.fillStyle = BLOCK_FILL_STYLE;
+                        ctx.strokeStyle = BLOCK_STROKE_STYLE;
+                        ctx.strokeRect(BLOCK_SIZE_W * j, BLOCK_SIZE_H * i, BLOCK_SIZE_W, BLOCK_SIZE_H);
+                    }
+                    ctx.fillRect(BLOCK_SIZE_W * j, BLOCK_SIZE_H * i, BLOCK_SIZE_W, BLOCK_SIZE_H);
                 }
-                ctx.fillRect(BLOCK_SIZE_W * j, BLOCK_SIZE_H * i, BLOCK_SIZE_W, BLOCK_SIZE_H);
             }
         }
-        /*
-        ctx.fillRect(0, 0, BLOCK_SIZE_W, BLOCK_SIZE_H);
-        ctx.fillRect(0, ((BLOCK_SIZE_H+SHADOW_BLUR)*1), BLOCK_SIZE_W, BLOCK_SIZE_H);
-        ctx.fillRect(0, ((BLOCK_SIZE_H+SHADOW_BLUR)*2), BLOCK_SIZE_W, BLOCK_SIZE_H);
-        ctx.fillRect(0, ((BLOCK_SIZE_H+SHADOW_BLUR)*3), BLOCK_SIZE_W, BLOCK_SIZE_H);
-        */
-        
-        //blockCreate(1, MOVE_X, MOVE_Y);
-        //blockCreate(1, 100, 0);
-        /*setInterval(function(){
-            blockCreate(1, MOVE_X, MOVE_Y)
-        }, 1000);*/
-        /*function blockCreate(block_flg, x, y){
-            let canvas = document.getElementById('canvas');
-            let ctx = canvas.getContext('2d');
-            if(block_flg == 1){
-                
-                ctx.fillStyle = FILL_STYLE;
-                ctx.shadowColor = SHADOW_COLOR;
-                ctx.shadowBlur = SHADOW_BLUR;
-                ctx.shadowOffsetX = 0;
-                ctx.shadowOffsetY = 0;
-                ctx.fillRect(x, y, BLOCK_SIZE_W, BLOCK_SIZE_H);
-                ctx.fillRect(x, y+((BLOCK_SIZE_H+SHADOW_BLUR)*1), BLOCK_SIZE_W, BLOCK_SIZE_H);
-                ctx.fillRect(x, y+((BLOCK_SIZE_H+SHADOW_BLUR)*2), BLOCK_SIZE_W, BLOCK_SIZE_H);
-                ctx.fillRect(x, y+((BLOCK_SIZE_H+SHADOW_BLUR)*3), BLOCK_SIZE_W, BLOCK_SIZE_H);
+
+        //ブロック作成関数
+        function createBlock(map, block){
+            let map_dt = map;
+            //let block_dt = block[block_no];
+            for(let i=0;i < block.length;i++){
+                for(let j=0;j < block[i].length;j++){
+                    map_dt[i][j] = block[i][j];
+                }
             }
-            
-            //MOVE_Y = MOVE_Y + 10;
-            //console.log(MOVE_Y);
-        }*/
+            return map_dt;
+        }
+        
         </script>
     </body>
 </html>
