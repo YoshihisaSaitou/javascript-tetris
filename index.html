@@ -57,7 +57,7 @@
             ]
         ];
 
-        //マップ定義
+        //マップ定義 0=背景,1=落下中ブロック,2=積まれたブロック
         let MAP = [
             [0,0,0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0,0],
@@ -87,6 +87,19 @@
         //マップ作成
         createMap(CTX, MAP);
         
+        setInterval(function(){
+            let x = 0;
+            let y = 0;
+            //ブロック移動
+            MAP = moveBlock(MAP, x, y);
+            //マップ作成
+            createMap(CTX, MAP);
+        }, 1000);
+        //ブロック移動
+        //MAP = moveBlock(MAP);
+        //マップ作成
+        //createMap(CTX, MAP);
+        
         //マップ作成関数
         function createMap(ctx, map){
             //iが高さでjが幅
@@ -106,16 +119,56 @@
 
         //ブロック作成関数
         function createBlock(map, block){
-            let map_dt = map;
-            //let block_dt = block[block_no];
             for(let i=0;i < block.length;i++){
                 for(let j=0;j < block[i].length;j++){
-                    map_dt[i][j] = block[i][j];
+                    if(block[i][j] == 1){
+                        map[i][j] = 1;
+                    }
                 }
             }
-            return map_dt;
+            return map;
         }
         
+        //ブロック移動関数
+        function moveBlock(map, x, y){
+            let ik = [];
+            let jk = [];
+            let stop = 0;
+            for(let i=0;i < map.length;i++){
+                if(stop == 1){
+                    break;
+                }
+                for(let j=0;j < map[i].length;j++){
+                    if(map[i][j] == 1){
+                        let ik_dt = i + 1 + y;
+                        let jk_dt = j + x;
+                        if(
+                            ik_dt >= 0
+                            && ik_dt <= map.length
+                            && jk_dt >= 0
+                            && jk_dt <= map[i].length
+                        ){
+                            ik.push(ik_dt);
+                            jk.push(jk_dt);
+                            map[i][j] = 0;
+                        }else{
+                            stop = 1;
+                            break;
+                        }
+                    }else if(map[i][j] == 2){
+                        stop = 1;
+                    }
+                }
+            }
+            
+            if(stop == 0){
+                for(let k=0;k < ik.length;k++){
+                    map[ik[k]][jk[k]] = 1;
+                }
+            }
+            
+            return map;
+        }
         </script>
     </body>
 </html>
