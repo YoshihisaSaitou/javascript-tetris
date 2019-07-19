@@ -34,7 +34,7 @@
         const BLOCK = [
             [
                 [1]
-            ],
+            ]/*,
             [
                 [1],
                 [1],
@@ -54,7 +54,7 @@
                 [1],
                 [1,1],
                 [1]
-            ]
+            ]*/
         ];
 
         //マップ定義 0=背景,1=落下中ブロック,2=積まれたブロック
@@ -83,18 +83,32 @@
         
         //マップにブロック作成
         let block_no = Math.floor(Math.random() * BLOCK.length);
-        MAP = createBlock(MAP, BLOCK[block_no]);
+        let default_x = Math.floor(Math.random() * MAP[0].length);
+        MAP = createBlock(MAP, BLOCK[block_no], default_x);
+        
         //マップ作成
         createMap(CTX, MAP);
         
         setInterval(function(){
-            let x = 0;
-            let y = 0;
+            let move_x = 0;
+            let move_y = 0;
+            
+            //衝突判定
+            let result = collisionDetection(MAP);
+            MAP = result.map;
+            if(result.is_detection){
+                //マップにブロック作成
+                let block_no = Math.floor(Math.random() * BLOCK.length);
+                let default_x = Math.floor(Math.random() * MAP[0].length);
+                MAP = createBlock(MAP, BLOCK[block_no], default_x);
+            }
+            //console.log(MAP);
             //ブロック移動
-            MAP = moveBlock(MAP, x, y);
+            MAP = moveBlock(MAP, move_x, move_y);
             //マップ作成
             createMap(CTX, MAP);
-        }, 1000);
+            
+        }, 100);//1000
         //ブロック移動
         //MAP = moveBlock(MAP);
         //マップ作成
@@ -104,7 +118,7 @@
         function createMap(ctx, map){
             //iが高さでjが幅
             for(let i=0;i < map.length;i++){
-                for(let j=0;j < map[i].length;j++){
+                for(let j = 0;j < map[i].length;j++){
                     if(map[i][j] == 0){
                         ctx.fillStyle = MAP_FILL_STYLE;
                     }else{
@@ -118,30 +132,58 @@
         }
 
         //ブロック作成関数
-        function createBlock(map, block){
-            for(let i=0;i < block.length;i++){
-                for(let j=0;j < block[i].length;j++){
+        function createBlock(map, block, default_x){
+            for(let i = 0;i < block.length;i++){
+                for(let j = 0;j < block[i].length;j++){
                     if(block[i][j] == 1){
-                        map[i][j] = 1;
+                        map[i][j + default_x] = 1;
                     }
                 }
             }
             return map;
         }
         
+        //衝突判定関数
+        function collisionDetection(map){
+            let is_detection = false;
+            let i = map.length - 1;
+            for(let j = 0;j < map[i].length;j++){
+                if(map[i][j] == 1){
+                    map[i][j] = 2;
+                    is_detection = true;
+                }
+            }
+            
+            for(let i = 0;i < map.length;i++){
+                for(let j = 0;j < map[i].length;j++){
+                    if(map[i][j] == 1){
+                        if(map[i + 1][j] == 2){
+                            map[i][j] = 2;
+                            is_detection = true;
+                        }
+                    }
+                }
+            }
+            
+            return {
+                'map':map,
+                'is_detection':is_detection
+            };
+        }
+        
         //ブロック移動関数
-        function moveBlock(map, x, y){
+        function moveBlock(map, move_x, move_y){
             let ik = [];
             let jk = [];
             let stop = 0;
-            for(let i=0;i < map.length;i++){
-                if(stop == 1){
-                    break;
-                }
-                for(let j=0;j < map[i].length;j++){
+            for(let i = 0;i < map.length;i++){
+                //if(stop == 1){
+                    //break;
+                //}
+                for(let j = 0;j < map[i].length;j++){
                     if(map[i][j] == 1){
-                        let ik_dt = i + 1 + y;
-                        let jk_dt = j + x;
+                        let ik_dt = i + 1 + move_y;
+                        let jk_dt = j + move_x;
                         if(
                             ik_dt >= 0
                             && ik_dt <= map.length
@@ -151,21 +193,25 @@
                             ik.push(ik_dt);
                             jk.push(jk_dt);
                             map[i][j] = 0;
-                        }else{
-                            stop = 1;
-                            break;
-                        }
-                    }else if(map[i][j] == 2){
-                        stop = 1;
-                    }
+                        }//else{
+                            //stop = 1;
+                            //break;
+                        //}
+                        
+                        
+                    }//else if(map[i][j] == 2){
+                        //stop = 1;
+                    //}
                 }
             }
             
-            if(stop == 0){
-                for(let k=0;k < ik.length;k++){
+            //if(stop == 0){
+            for(let k=0;k < ik.length;k++){
+                if(ik[k] < map.length && jk[k] < map[0].length){
                     map[ik[k]][jk[k]] = 1;
                 }
             }
+            //}
             
             return map;
         }
