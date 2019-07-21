@@ -34,13 +34,13 @@
         const BLOCK = [
             [
                 [1]
-            ]/*,
+            ],
             [
                 [1],
                 [1],
                 [1],
                 [1]
-            ],
+            ]/*,
             [
                 [1],
                 [1],
@@ -160,8 +160,19 @@
                         if(map[i + 1][j] == 2){
                             map[i][j] = 2;
                             is_detection = true;
+                            /*for(let k = 0;k < map.length;k++){
+                                for(let l = 0;l < map[k].length;l++){
+                                    if(map[k][l] == 1){
+                                        map[k][l] = 2;
+                                    }
+                                }
+                            }
+                            break;*/
                         }
                     }
+                }
+                if(is_detection){
+                    break;
                 }
             }
             
